@@ -17,9 +17,6 @@ public class MainActivity extends AppCompatActivity {
         student = findViewById(R.id.studentButton);
         teacher = findViewById(R.id.teacherButton);
         person = findViewById(R.id.personButton);
-//
-//        DBHelper db = new DBHelper(this);
-//        boolean x = db.deleteData("mustafakhorakiwala6@gmail.com");
 
         student.setOnClickListener(new View.OnClickListener() {
             @Override

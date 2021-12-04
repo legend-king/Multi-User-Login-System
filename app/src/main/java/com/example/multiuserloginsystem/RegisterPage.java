@@ -148,7 +148,7 @@ public class RegisterPage extends AppCompatActivity {
                         assert message != null;
                         Transport.send(message);
                     } catch (MessagingException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
                 }
             }
