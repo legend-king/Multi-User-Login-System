@@ -43,30 +43,35 @@ public class VerificationCode extends AppCompatActivity {
         verifyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int enteredCode = Integer.parseInt(verifyCodeEditText.getText().toString());
-                if (rand!=enteredCode){
-                    Toast.makeText(getApplicationContext(), R.string.codeWrong, Toast.LENGTH_LONG).show();
+                if (verifyCodeEditText.getText().toString().equals("")){
+                    Toast.makeText(getApplicationContext(), R.string.fieldNotEmpty, Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    if (x==1){
-                        boolean inserted = db.insertData(finalName, finalId,email, finalPassword, finalType);
-                        if (inserted){
-                            Intent intent1 = new Intent(getApplicationContext(), FinalPage.class);
-                            intent1.putExtra("message_email", email);
-                            startActivity(intent1);
-                        }
-                        else{
-                            Toast.makeText(getApplicationContext(), R.string.registrationFailed, Toast.LENGTH_SHORT).show();
-                            Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent1);
-                        }
-                        finish();
+                    int enteredCode = Integer.parseInt(verifyCodeEditText.getText().toString());
+                    if (rand!=enteredCode){
+                        Toast.makeText(getApplicationContext(), R.string.codeWrong, Toast.LENGTH_LONG).show();
                     }
-                    else if (x==0){
-                        Intent intent1 = new Intent(getApplicationContext(), ChangePassword.class);
-                        intent1.putExtra("message_email",email);
-                        startActivity(intent1);
-                        finish();
+                    else{
+                        if (x==1){
+                            boolean inserted = db.insertData(finalName, finalId,email, finalPassword, finalType);
+                            if (inserted){
+                                Intent intent1 = new Intent(getApplicationContext(), FinalPage.class);
+                                intent1.putExtra("message_email", email);
+                                startActivity(intent1);
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), R.string.registrationFailed, Toast.LENGTH_SHORT).show();
+                                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent1);
+                            }
+                            finish();
+                        }
+                        else if (x==0){
+                            Intent intent1 = new Intent(getApplicationContext(), ChangePassword.class);
+                            intent1.putExtra("message_email",email);
+                            startActivity(intent1);
+                            finish();
+                        }
                     }
                 }
 

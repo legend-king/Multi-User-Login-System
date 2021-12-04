@@ -41,42 +41,45 @@ public class ForgotPassword extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String forgotPasswordEmail = email.getText().toString();
-                if (DB.checkEmailThere(forgotPasswordEmail)){
-                    int rand = (int)(Math.random() * range) + min;
-                    Intent intent = new Intent(getApplicationContext(), VerificationCode.class);
-                    intent.putExtra("message_email", forgotPasswordEmail);
-                    intent.putExtra("message_key", 0);
-                    intent.putExtra("message_random_value", rand);
-                    startActivity(intent);
-                    Properties properties = new Properties();
-                    properties.put("mail.smtp.auth", "true");
-                    properties.put("mail.smtp.starttls.enable", "true");
-                    properties.put("mail.smtp.host", "smtp.gmail.com");
-                    properties.put("mail.smtp.port", "587");
+                if (forgotPasswordEmail.equals("")) {
+                    Toast.makeText(getApplicationContext(), R.string.fieldNotEmpty, Toast.LENGTH_SHORT).show();
+                } else {
+                    if (DB.checkEmailThere(forgotPasswordEmail)) {
+                        int rand = (int) (Math.random() * range) + min;
+                        Intent intent = new Intent(getApplicationContext(), VerificationCode.class);
+                        intent.putExtra("message_email", forgotPasswordEmail);
+                        intent.putExtra("message_key", 0);
+                        intent.putExtra("message_random_value", rand);
+                        startActivity(intent);
+                        Properties properties = new Properties();
+                        properties.put("mail.smtp.auth", "true");
+                        properties.put("mail.smtp.starttls.enable", "true");
+                        properties.put("mail.smtp.host", "smtp.gmail.com");
+                        properties.put("mail.smtp.port", "587");
 
-                    final String myAccountEmail = "practicetest57@gmail.com";
-                    final String myAccountPassword = "Test@1234";
+                        final String myAccountEmail = "practicetest57@gmail.com";
+                        final String myAccountPassword = "Test@1234";
 
-                    Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-                        @Override
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(myAccountEmail, myAccountPassword);
+                        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+                            @Override
+                            protected PasswordAuthentication getPasswordAuthentication() {
+                                return new PasswordAuthentication(myAccountEmail, myAccountPassword);
+                            }
+                        });
+
+                        Message message = prepareMessage(session, myAccountEmail, forgotPasswordEmail, rand);
+                        try {
+                            assert message != null;
+                            Transport.send(message);
+                        } catch (MessagingException e) {
+                            throw new RuntimeException(e);
                         }
-                    });
-
-                    Message message = prepareMessage(session, myAccountEmail, forgotPasswordEmail, rand);
-                    try {
-                        assert message != null;
-                        Transport.send(message);
-                    } catch (MessagingException e) {
-                        throw new RuntimeException(e);
+                    } else {
+                        Toast.makeText(getApplicationContext(), R.string.emailNotRegistered, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getApplicationContext(), ForgotPassword.class);
+                        finish();
+                        startActivity(intent);
                     }
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), R.string.emailNotRegistered, Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getApplicationContext(), ForgotPassword.class);
-                    finish();
-                    startActivity(intent);
                 }
             }
         });

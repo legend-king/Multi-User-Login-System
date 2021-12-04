@@ -32,7 +32,10 @@ public class LoginPage extends AppCompatActivity {
             public void onClick(View v) {
                 String email = emailLogin.getText().toString();
                 String password = emailPassword.getText().toString();
-                if (!db.checkEmailThere(email)){
+                if (email.equals("") || password.equals("")){
+                    Toast.makeText(getApplicationContext(), R.string.allValues, Toast.LENGTH_SHORT).show();
+                }
+                else if (!db.checkEmailThere(email)){
                     Toast.makeText(getApplicationContext(), R.string.emailNotRegistered, Toast.LENGTH_SHORT).show();
                 }
                 else{
